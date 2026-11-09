@@ -21,8 +21,12 @@ yaml_file="${XPL_ROOT}/policy/${policy_name}/deploy.yml"
 
 echo "[SERVER] policy=${policy_name}, task=${task_name}, policy_server_port=${policy_server_port}"
 
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate "${policy_conda_env}"
+if [[ -f "${policy_conda_env}/bin/activate" ]]; then
+    source "${policy_conda_env}/bin/activate"
+else
+    source "$(conda info --base)/etc/profile.d/conda.sh"
+    conda activate "${policy_conda_env}"
+fi
 
 exec env \
     PYTHONWARNINGS=ignore::UserWarning \

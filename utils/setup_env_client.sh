@@ -27,7 +27,9 @@ eval_env_mode="$(resolve_eval_env_type)" || exit 1
 # pulls in load_file -> yaml. Activation is best-effort and confined to the
 # subshell; without conda the read falls back to the ambient interpreter.
 deploy_meta="$(
-    if command -v conda >/dev/null 2>&1; then
+    if [[ -f "${eval_env_conda_env}/bin/activate" ]]; then
+        source "${eval_env_conda_env}/bin/activate"
+    elif command -v conda >/dev/null 2>&1; then
         conda_base="$(conda info --base 2>/dev/null)" || conda_base=""
         if [[ -n "${conda_base}" && -f "${conda_base}/etc/profile.d/conda.sh" ]]; then
             # shellcheck disable=SC1090
